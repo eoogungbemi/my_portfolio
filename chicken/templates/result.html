@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Result - Smart Kids</title>
+    <style>
+        body {
+            background-color: #2d2dff; /* Space Blue */
+            color: white;
+            font-family: 'Comic Sans MS', sans-serif;
+            text-align: center;
+            padding: 50px;
+            background-image: url('https://www.w3schools.com/w3images/space.jpg'); /* Space Background */
+            background-size: cover;
+            background-repeat: no-repeat;
+        }
+
+        h1 {
+            font-size: 3em;
+            color: #FFD700; /* Gold */
+        }
+
+        .message {
+            font-size: 1.5em;
+            margin-top: 20px;
+            color: #ff6347; /* Tomato Red */
+            text-shadow: 2px 2px 4px #000000;
+        }
+
+        .level-info {
+            font-size: 1.5em;
+            color: #ADD8E6; /* Light Blue */
+            margin-top: 20px;
+        }
+
+        .restart-button {
+            margin-top: 30px;
+            padding: 15px 30px;
+            background-color: #32CD32; /* Lime Green */
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .restart-button:hover {
+            background-color: #228B22; /* Dark Green */
+        }
+
+        .hint {
+            font-size: 1.2em;
+            color: #f0e68c; /* Light Yellow */
+            margin-top: 20px;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <h1>{{ message }}</h1>
+
+    <p class="level-info">You are at Level: {{ level }}</p>
+
+    {% if success %}
+        <p class="message">Great Job! You've completed this level.</p>
+    {% elif failure %}
+        <p class="message">Game Over! The correct number was {{ session['number'] }}.</p>
+    {% endif %}
+
+    <p class="hint">{{ hint }}</p>
+
+    <button class="restart-button" onclick="window.location.href='/restart'">Try Again!</button>
+</body>
+</html>

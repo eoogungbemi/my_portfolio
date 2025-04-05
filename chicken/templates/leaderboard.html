@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leaderboard - Smart Kids Game</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background-color: #0d1b2a;
+            color: #FFF;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            padding: 30px;
+            background-color: #32CD32;
+            text-align: center;
+            width: 350px;
+            border-radius: 15px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+        }
+        h1 {
+            font-size: 36px;
+        }
+        .leaderboard {
+            margin-top: 20px;
+            text-align: left;
+            font-size: 18px;
+        }
+        .leaderboard-entry {
+            margin-bottom: 10px;
+        }
+        .back-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #FFD700;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .back-button:hover {
+            background-color: #FF4500;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏆 Leaderboard 🏆</h1>
+        <div class="leaderboard">
+            <h3>Top Players:</h3>
+            {% if leaderboard %}
+                {% for entry in leaderboard %}
+                    <div class="leaderboard-entry">{{ entry.username }} - Level {{ entry.level }}</div>
+                {% endfor %}
+            {% else %}
+                <p>No players yet! Be the first to play and enter your name!</p>
+            {% endif %}
+        </div>
+
+        <form action="{{ url_for('view_leaderboard') }}" method="POST">
+            <input type="text" name="username" placeholder="Enter your name to join the leaderboard" required>
+            <button type="submit">Submit</button>
+        </form>
+
+        <a href="{{ url_for('index') }}" class="back-button">Back to Game</a>
+    </div>
+</body>
+</html>

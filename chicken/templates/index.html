@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Kids - Guess the Number Game</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background-color: #0d1b2a; /* Dark Space Blue */
+            color: #FFF;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-image: url('https://cdn.pixabay.com/photo/2016/11/29/05/47/space-1866612_960_720.jpg'); /* Space Background */
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+
+        .container {
+            background: linear-gradient(45deg, #32CD32, #FFD700);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            width: 350px;
+            position: relative;
+        }
+
+        h1 {
+            font-size: 34px;
+            color: #FFF;
+            margin-bottom: 20px;
+            text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5);
+        }
+
+        h2 {
+            font-size: 22px;
+            color: #FFFF00;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        p {
+            font-size: 20px;
+            color: #FFF;
+        }
+
+        input[type="number"] {
+            padding: 10px;
+            font-size: 18px;
+            border-radius: 10px;
+            border: 2px solid #FFFF00;
+            width: calc(100% - 26px);
+            margin-bottom: 20px;
+            box-sizing: border-box;
+            background-color: #000;
+            color: #FFF;
+        }
+
+        button {
+            padding: 15px 25px;
+            font-size: 18px;
+            color: white;
+            background-color: #FFD700;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-bottom: 10px;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #FF4500;
+        }
+
+        .restart-button {
+            background-color: #8BC34A;
+        }
+
+        .restart-button:hover {
+            background-color: #7CB342;
+        }
+
+        .hint {
+            font-size: 18px;
+            color: #FF6347;
+            margin-top: 20px;
+            font-style: italic;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .level-info {
+            font-size: 1.5em;
+            color: #ADD8E6;
+            margin-top: 20px;
+        }
+
+        .rocket {
+            width: 60px;
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: rocketBounce 1s infinite;
+        }
+
+        @keyframes rocketBounce {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-30px); }
+            100% { transform: translateY(0); }
+        }
+
+        .leaderboard-link {
+            display: block;
+            margin-top: 10px;
+            color: #FFF;
+            text-decoration: none;
+            font-size: 18px;
+        }
+
+        .leaderboard-link:hover {
+            color: #FFD700;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🌌 Smart Kids - Guess the Number 🌌</h1>
+        <h2>Level: {{ level }}</h2>
+        <p>Can you guess the number?</p>
+        <form action="{{ url_for('guess') }}" method="post">
+            <input type="number" name="guess" min="1" max="{{ max_number }}" required placeholder="Enter your guess">
+            <button type="submit">🎯 Submit Guess</button>
+        </form>
+
+        {% if message %}
+            <p class="hint">{{ message }}</p>
+        {% endif %}
+
+        <p class="level-info">Max Number: {{ max_number }}</p>
+
+        <form action="{{ url_for('restart') }}" method="get">
+            <button type="submit" class="restart-button">🔄 Restart Game</button>
+        </form>
+
+        <a href="{{ url_for('view_leaderboard') }}" class="leaderboard-link">🏆 View Leaderboard</a>
+
+        <img src="https://img.icons8.com/ios/452/rocket.png" class="rocket" alt="Rocket Icon">
+    </div>
+
+    <!-- Sound Effects -->
+    <audio id="correct-sound" src="https://www.soundjay.com/button/beep-07.wav" preload="auto"></audio>
+    <audio id="wrong-sound" src="https://www.soundjay.com/button/beep-06.wav" preload="auto"></audio>
+
+    <script>
+        // Play correct sound when the user guesses right
+        function playCorrectSound() {
+            document.getElementById("correct-sound").play();
+        }
+
+        // Play wrong sound when the user guesses wrong
+        function playWrongSound() {
+            document.getElementById("wrong-sound").play();
+        }
+
+        // Call the sound functions based on the message
+        {% if message == "Congratulations! You've moved to level {{ level }}." %}
+            playCorrectSound();
+        {% elif message == "Game Over! The number was {{ session['number'] }}." %}
+            playWrongSound();
+        {% endif %}
+    </script>
+</body>
+</html>
